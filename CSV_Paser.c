@@ -1,5 +1,30 @@
-// Algorithm.cpp : Defines the entry point for the console application.
-//
+/*
+ * \file        CSV_Paser.c
+ * \brief       Read one field of CSV file record.
+ * \Author      Cedar
+ * \date        2013-11-20
+ * \version     V1.1
+ * \note        If you have any questions about it, please feel free to write me
+ *              My Email is : xuesong5825718@gmail.com**
+ *
+ * \license
+ * Copyright (c) 2013 Cedar, MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -16,7 +41,7 @@
 /********************************************************************************
  *              Internal data struct
 *********************************************************************************/
-static char * TestStr = "  \"Hello   ,  world\"  , Jim, xxxx, ssss, ";
+static char * TestStr = "  \"Hello   ,  world\"  ,    Jim   , xxxx, ssss, ";
 static char TargetPool[BUF_NUM][BUF_SIZE];
 
 /********************************************************************************
@@ -34,15 +59,15 @@ int main(int argc, char* argv[])
 
     //! Clear Buffer Memory
     memset(TargetPool, 0, BUF_SIZE*BUF_NUM);
-    
-    // Read Five Field then print them out.
+
+    // Read Field then print them out.
     for(i = 0; i < BUF_NUM; i++)
     {
         pAddr = CSVParser_ReadField(pAddr, TargetPool[i]);
         printf("Field %d value :%s\r\n", i, TargetPool[i]);
     }
 
-	return 0;
+    return 0;
 }
 
 
@@ -54,7 +79,7 @@ int main(int argc, char* argv[])
  * <RFC4180 : Common Format and MIME Type for Comma-Separated Values (CSV) Files>
  *   This function follow the rule 1-7 of RFC4180, more information, please reference
  * to the linkage below:
- * http://www.rfc-editor.org/rfc/rfc4180.txt 
+ * http://www.rfc-editor.org/rfc/rfc4180.txt
  *
  * \param  [in] src the begin address of Record.
  * \param  [in] tar the data buffer that store the field of Record read from src.
@@ -71,12 +96,12 @@ char * CSVParser_ReadField(char * src, char * tar)
 #define CR              0x0D
 #define LF              0x0A
 
-	//! Skip the front space
-	while(*src == ' ')
-	{
-		src++;
-	}
-	
+    //! Skip the front space
+    while(*src == ' ')
+    {
+        src++;
+    }
+
 
     //! Double-quotes Enclosed Field ?
     if(*src == '"')
@@ -115,9 +140,17 @@ char * CSVParser_ReadField(char * src, char * tar)
 
     //! Handle
     //! -# General field. e.g: A, BB, CCC, ...
-    //! -# The end space of double-quotes enclosed block. e.g: "ABCD"    , B, C,
+    //! -# Remove the end space of double-quotes enclosed block. e.g: "ABCD"    , B, C,
     while(1)
-	{
+    {
+
+        //! Skip space
+        if(*src == ' ')
+        {
+            src++;
+            continue;
+        }
+
         //! End with CR/LF
         if((*src == CR) || (*src == LF))
         {
@@ -129,11 +162,11 @@ char * CSVParser_ReadField(char * src, char * tar)
         {
             *tar++ = *src++;
         }
-		else
-		{
-			break;
-		}
-	}
+        else
+        {
+            break;
+        }
+    }
 
     //! return the begin address of next field.
     return (src + 1);
