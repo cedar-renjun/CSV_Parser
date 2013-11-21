@@ -2,10 +2,24 @@
  * \file        CSV_Paser.c
  * \brief       Read one field of CSV file record.
  * \Author      Cedar
- * \date        2013-11-20
- * \version     V1.1
+ * \date        2013-11-21
+ * \version     V1.2
+ * \github      https://github.com/cedar-renjun/CSV_Parser
  * \note        If you have any questions about it, please feel free to write me
  *              My Email is : xuesong5825718@gmail.com**
+ *
+ * \History
+ *  ----------------------V1.0----------------------
+ *  First Commit
+ *
+ *  ----------------------V1.1----------------------
+ *  1: Format the source code, remove all tab
+ *  2: Add MIT license
+ *  3: Remove the back-end space of Record Field
+ *
+ *  ----------------------V1.2----------------------
+ *  1: Add github address
+ *  2: Update the version and date
  *
  * \license
  * Copyright (c) 2013 Cedar, MIT License
